@@ -1,10 +1,12 @@
 # Hello World in JVM/Java on Fission
 
-The `io.fission.HelloWorld.java` class is a very simple fission function that implements `application.Function` and says "Hello, World!" .
+The `io.fission.HelloWorld.java` class is a very simple fission function that implements `application.Function` and
+says "Hello, World!" .
 
 ## Building and deploying using Fission
 
-Fission's builder can be used to create the binary artifact from source code. Create an environment with builder image and then create a package. 
+Fission's builder can be used to create the binary artifact from source code. Create an environment with builder image
+and then create a package.
 
 ```
 $ zip -r java-src-pkg.zip *
@@ -41,13 +43,15 @@ You can build the jar file in one of the two ways below based on your setup:
 $ bash -x ./build.sh
 
 ```
+
 - If you have JDK and Maven installed, you can directly build the JAR file using command:
 
 ```
 $ mvn clean package
 ```
 
-Both of above steps will generate a target subdirectory which has the archive `target/hello-world-1.0-SNAPSHOT-jar-with-dependencies.jar` which will be used for creating function.
+Both of above steps will generate a target subdirectory which has the
+archive `target/hello-world-1.0-SNAPSHOT-jar-with-dependencies.jar` which will be used for creating function.
 
 - The archive created above will be used as a deploy package when creating the function.
 

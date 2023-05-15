@@ -11,7 +11,7 @@ spec:
   imagepullsecret: ""
   keeparchive: true
   poolsize: 3
-  resources: {}
+  resources: { }
   runtime:
     image: fission/jvm-jersey-env
   version: 2

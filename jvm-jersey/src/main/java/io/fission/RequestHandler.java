@@ -19,10 +19,10 @@ public class RequestHandler {
         webAppContext.setExtractWAR(true);
         try {
             hotSwapHandler.setHandler(webAppContext);
-        } catch (Exception e){
+        } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
-        if (!webAppContext.isAvailable()){
+        if (!webAppContext.isAvailable()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         return Response.ok().build();

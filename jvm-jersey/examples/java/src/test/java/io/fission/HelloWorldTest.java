@@ -1,7 +1,6 @@
 package io.fission;
 
 
-import application.MyApplication;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.MediaType;
@@ -14,33 +13,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class HelloWorldTest extends JerseyTest {
-	@Override
-	protected Application configure() {
-		return new ResourceConfig(HelloWorld.class);
-	}
+    @Override
+    protected Application configure() {
+        return new ResourceConfig(HelloWorld.class);
+    }
 
-	@Test
-	public void testGet() {
-		try {
-			var hello = target().request().get(String.class);
-			assertEquals(hello, "Hello World!");
-		} catch (jakarta.ws.rs.client.ResponseProcessingException e) {
-			e.printStackTrace();
-			org.junit.jupiter.api.Assertions.fail();
-		}
-	}
-	@Test
-	public void testPost() {
-		try {
-			String requestBody = "{\"message\":\"Hello\nWorld!\"}";
-			Response response = target().request().post(Entity.entity(requestBody,MediaType.TEXT_PLAIN));
-			assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-			assertEquals(requestBody, response.readEntity(String.class));
-		} catch (jakarta.ws.rs.client.ResponseProcessingException e) {
-			e.printStackTrace();
-			org.junit.jupiter.api.Assertions.fail();
-		}
-	}
+    @Test
+    public void testGet() {
+        try {
+            var hello = target().request().get(String.class);
+            assertEquals(hello, "Hello World!");
+        } catch (jakarta.ws.rs.client.ResponseProcessingException e) {
+            e.printStackTrace();
+            org.junit.jupiter.api.Assertions.fail();
+        }
+    }
+
+    @Test
+    public void testPost() {
+        try {
+            String requestBody = "{\"message\":\"Hello\nWorld!\"}";
+            Response response = target().request().post(Entity.entity(requestBody, MediaType.TEXT_PLAIN));
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertEquals(requestBody, response.readEntity(String.class));
+        } catch (jakarta.ws.rs.client.ResponseProcessingException e) {
+            e.printStackTrace();
+            org.junit.jupiter.api.Assertions.fail();
+        }
+    }
 }
 /*
 @Test

@@ -15,61 +15,60 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
 
-	private static final int DEFAULT_PORT = 8888;
+    private static final int DEFAULT_PORT = 8888;
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    static HotSwapHandler hotSwapHandler;
 
-	static HotSwapHandler hotSwapHandler;
-	private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    public Main(int serverPort) throws Exception {
+        Server server = new Server(serverPort);
 
-	public Main(int serverPort) throws Exception {
-		Server server = new Server(serverPort);
+        ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
+        server.setHandler(contextHandlerCollection);
 
-		ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
-		server.setHandler(contextHandlerCollection);
+        hotSwapHandler = new HotSwapHandler();
+        ContextHandler contextHandler = new ContextHandler();
+        contextHandler.setHandler(new DefaultHandler());
+        contextHandler.setContextPath("/");
+        hotSwapHandler.setHandler(contextHandler);
+        contextHandlerCollection.addHandler(hotSwapHandler);
 
-		hotSwapHandler = new HotSwapHandler();
-		ContextHandler contextHandler = new ContextHandler();
-		contextHandler.setHandler(new DefaultHandler());
-		contextHandler.setContextPath("/");
-		hotSwapHandler.setHandler(contextHandler);
-		contextHandlerCollection.addHandler(hotSwapHandler);
+        ResourceConfig config = new ResourceConfig();
+        config.register(RequestHandler.class);
+        // Create a ServletContainer with the ResourceConfig
+        ServletContainer jerseyServletContainer = new ServletContainer(config);
+        // Create a ServletHolder with the ServletContainer
+        ServletHolder servletHolder = new ServletHolder(jerseyServletContainer);
+        // Create a new ServletContextHandler and add the ServletHolder to it
+        ServletContextHandler jettyServletContext = new ServletContextHandler();
+        jettyServletContext.setContextPath("/v2"); // Set the context path for the Jersey resource
+        jettyServletContext.addServlet(servletHolder, "/*");
+        // Add the new ServletContextHandler to the ContextHandlerCollection
+        contextHandlerCollection.addHandler(jettyServletContext);
 
-		ResourceConfig config = new ResourceConfig();
-		config.register(RequestHandler.class);
-		// Create a ServletContainer with the ResourceConfig
-		ServletContainer jerseyServletContainer = new ServletContainer(config);
-		// Create a ServletHolder with the ServletContainer
-		ServletHolder servletHolder = new ServletHolder(jerseyServletContainer);
-		// Create a new ServletContextHandler and add the ServletHolder to it
-		ServletContextHandler jettyServletContext = new ServletContextHandler();
-		jettyServletContext.setContextPath("/v2"); // Set the context path for the Jersey resource
-		jettyServletContext.addServlet(servletHolder, "/*");
-		// Add the new ServletContextHandler to the ContextHandlerCollection
-		contextHandlerCollection.addHandler(jettyServletContext);
-
-		// Start the server
-		server.start();
-		logger.info(server.getURI().toString());
-		Handler[] handlers = contextHandlerCollection.getHandlers();
-		for (Handler handler : handlers) {
-			if (handler instanceof ContextHandler contextHandle) {
-				String contextPath = contextHandle.getContextPath();
-				logger.info("Entry point: " + contextPath);
-			}
-		}
-	}
+        // Start the server
+        server.start();
+        logger.info(server.getURI().toString());
+        Handler[] handlers = contextHandlerCollection.getHandlers();
+        for (Handler handler : handlers) {
+            if (handler instanceof ContextHandler contextHandle) {
+                String contextPath = contextHandle.getContextPath();
+                logger.info("Entry point: " + contextPath);
+            }
+        }
+    }
 
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 
-		int serverPort = DEFAULT_PORT;
+        int serverPort = DEFAULT_PORT;
 
-		if(args.length >= 1) {
-			try {
-				serverPort = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
-		new Main(serverPort);
-	}
+        if (args.length >= 1) {
+            try {
+                serverPort = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        new Main(serverPort);
+    }
 }

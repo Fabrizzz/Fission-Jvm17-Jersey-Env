@@ -1,6 +1,6 @@
 include:
-- src
-- pom.xml
+  - src
+  - pom.xml
 kind: ArchiveUploadSpec
 name: src-URlE
 
@@ -13,12 +13,12 @@ metadata:
   namespace: default
 spec:
   deployment:
-    checksum: {}
+    checksum: { }
   environment:
     name: java-jersey
     namespace: default
   source:
-    checksum: {}
+    checksum: { }
     type: url
     url: archive://src-URlE
 status:

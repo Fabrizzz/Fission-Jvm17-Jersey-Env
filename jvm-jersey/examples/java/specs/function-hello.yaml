@@ -23,5 +23,5 @@ spec:
     packageref:
       name: hellojava
       namespace: default
-  resources: {}
+  resources: { }
   secrets: null

@@ -6,23 +6,22 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Response;
 
 import java.io.BufferedReader;
-import java.util.stream.Collectors;
 import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 @Path("")
 public class HelloWorld extends Function {
 
-	public static final String RETURN_STRING = "Hello World!";
+    public static final String RETURN_STRING = "Hello World!";
 
-	@Override
-	public Response call(ContainerRequestContext request) {
-		if(request.getMethod().equals("GET")) {
-			return Response.ok(RETURN_STRING).build();
-		}
-		else {
-			String body = new BufferedReader(new InputStreamReader(request.getEntityStream())).lines()
-					.parallel().collect(Collectors.joining("\n"));
-			return Response.ok(body).build();
-		}
-	}
+    @Override
+    public Response call(ContainerRequestContext request) {
+        if (request.getMethod().equals("GET")) {
+            return Response.ok(RETURN_STRING).build();
+        } else {
+            String body = new BufferedReader(new InputStreamReader(request.getEntityStream())).lines()
+                    .parallel().collect(Collectors.joining("\n"));
+            return Response.ok(body).build();
+        }
+    }
 }
