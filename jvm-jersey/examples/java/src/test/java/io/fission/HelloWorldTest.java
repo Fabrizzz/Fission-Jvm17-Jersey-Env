@@ -31,9 +31,8 @@ public class HelloWorldTest extends JerseyTest {
 
     @Test
     public void testPost() {
-        try {
-            String requestBody = "{\"message\":\"Hello\nWorld!\"}";
-            Response response = target().request().post(Entity.entity(requestBody, MediaType.TEXT_PLAIN));
+        String requestBody = "{\"message\":\"Hello\nWorld!\"}";
+        try (Response response = target().request().post(Entity.entity(requestBody, MediaType.TEXT_PLAIN));){
             assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
             assertEquals(requestBody, response.readEntity(String.class));
         } catch (jakarta.ws.rs.client.ResponseProcessingException e) {
