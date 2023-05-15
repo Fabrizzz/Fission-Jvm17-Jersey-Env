@@ -1,4 +1,4 @@
-FROM maven:3.5-jdk-8 as BUILD
+FROM 3.9.1-eclipse-temurin-11-alpine as BUILD
 WORKDIR /usr/src/myapp/
 
 # To reuse the build cache, here we split maven dependency
@@ -9,7 +9,7 @@ RUN mvn dependency:go-offline
 COPY src /usr/src/myapp/src/
 RUN mvn package
 
-FROM openjdk:8-jre-alpine
-COPY --from=BUILD /usr/src/myapp/target/env-jvm-jersey-0.0.1.jar /app.jar
+FROM eclipse-temurin:17-jdk-alpine
+COPY --from=BUILD /usr/src/myapp/target/env-jvm-jersey-0.0.2.jar /app.jar
 ENTRYPOINT java ${JVM_OPTS} -Djava.security.egd=file:/dev/./urandom -jar app.jar 8888
 EXPOSE 8888
