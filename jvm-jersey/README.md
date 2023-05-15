@@ -2,7 +2,7 @@
 
 This is the JVM (Jersey based) environment for Fission.
 
-It's a Docker image containing a OpenJDK8 runtime, along with a
+It's a Docker image containing a OpenJDK17 runtime, along with a
 dynamic loader. A few dependencies are included in the
 pom.xml file.
 
@@ -26,7 +26,6 @@ called USER. Build and push the image to the the registry:
    docker build -t USER/jvm-jersey-env . && docker push USER/jvm-jersey-env
 ```
 
-You can also create environment image based on JVM 11 using Dockerfile-11 in this directory.
 
 ## Using the image in fission
 
@@ -48,23 +47,17 @@ same environment name as this command will use this environment.
 
 ## Web Server Framework
 
-JVM Jersey environment uses an embedded Jetty HTTP server by default, as can be seen in the pom.xml file.
+JVM Jersey environment uses an embedded Jetty 11 server by default, as can be seen in the pom.xml file.
 
 ```
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-server</artifactId>
-	<version>9.0.4.v20130625</version>
-</dependency>
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-servlet</artifactId>
-	<version>9.0.4.v20130625</version>
-</dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+        </dependency>
 ```
 
 ## Java and JVM builder
 
-There are two JVM environment builder based on OpenJDK8 and OpenJDK 11 and using Maven 3.5.4. The default build command
+The default build command
 runs `mvn clean package` and uses the target/*with-dependencies.jar file for function. The default build command can be
 overridden as long as the uber jar file is copied to ${DEPLOY_PKG}.
